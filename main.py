@@ -1,5 +1,5 @@
 from colorama import Fore, Style
-import _funct_ as fnct
+import etc._funct_ as fnct
 import os
 from config import clean_cmd
 
