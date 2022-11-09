@@ -1,13 +1,13 @@
 """
-1. Add or Remove '#' before line to active or deactive it.
-2. Don't make anykind of change in variables.
+1. Add or Remove '#' before line to activate or deactivate it.
+2. Don't make any kind of change in variables.
 """
 
-##MYSQL Connection
-host=" "
-user=" "
-password=" "
-database=" "
+## MYSQL Connection
+host = " "
+user = " "
+password = " "
+database = " "
 
-##System
-clean_cmd = "clear"
+## System
+clean_cmd = "cls"
