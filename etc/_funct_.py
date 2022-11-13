@@ -1,14 +1,23 @@
 def dbs_agent(command):
+    from colorama import Fore, Style
     import config
     import mysql.connector as msc
     with msc.connect(
             host=config.host,
             user=config.user,
-            password=config.passwd
+            password=config.password,
+            database=config.database
     ) as dbs:
-        cursor = dbs.cursor()
-        cursor.execute(f"{command}")
-        dbs.commit()
+        if dbs.is_connected():
+            cursor = dbs.cursor()
+            cursor.execute(f"{command}")
+            data = cursor.fetchall()
+            dbs.commit()
+            cursor.close()
+            return data
+        else:
+            print(Fore.RED + "Configure MYSQL correctly")
+            Style.RESET_ALL
 
 
 def header(banner):
