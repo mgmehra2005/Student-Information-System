@@ -7,12 +7,11 @@ try:
     # Body Base
     fnct.logs("Program Started")
     base = base_builder.Tk()
-    base.geometry("13600x720")
-    base.minsize(967, 554)
     icon_image = base_builder.PhotoImage(file='image/logo.png')
     base.iconphoto(True, icon_image)
     if "config.py" in os.listdir():
-
+        base.geometry("13600x720")
+        base.minsize(967, 554)
         base.title("Student Information System")
 
         # Header Frame
@@ -183,9 +182,9 @@ try:
     # Configuration
     else:
         base.title("Student Information System - Configuration Error")
-        base.geometry("400x600")
-        base_builder.Label(base, text="Configuration file is missing.", fg='red', font=(' ', 20, 'bold')).pack(side='top')
-        base_builder.Button(base, text='Exit', relief='solid', borderwidth=1, pady=2, padx=5, command=quit).pack(side='bottom')
+        base.geometry("400x100")
+        base_builder.Label(base, text="Configuration file is missing.", fg='red', font=(' ', 12, 'bold')).pack(side='top', pady=5)
+        base_builder.Button(base, text='Exit', relief='solid', borderwidth=1, pady=2, padx=15, command=quit, fg='blue').pack(anchor='se', side='bottom', pady=5, padx=10)
     base.mainloop()
 except Exception as error:
     fnct.logs(f"Error -> {error}")
