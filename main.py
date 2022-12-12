@@ -24,7 +24,7 @@ try:
 
         # Menu Frame
         menu_frm = base_builder.Frame(base, borderwidth=2, relief='solid', padx=0)
-        menu_frm.pack(side='left', anchor='w', fill='y', pady=10, padx=0)
+        menu_frm.pack(side='left', anchor='w', fill='y', pady=10, padx=1)
 
         # Displayer Box
         scroll = base_builder.Scrollbar(display_frm)
@@ -142,7 +142,121 @@ try:
             base_builder.Entry(option_frm, textvariable=dob, relief='solid').place(x=510, y=42)
 
             base_builder.Button(option_frm, text='Submit', bg='#34a700', fg='white', padx=15, pady=5, font=(" ", 10, 'bold'), command=submit_rec).place(x=950, y=2)
-        
+
+        def update_rec():
+            show_record()
+            frame_clear(option_frm)
+            def update_rec():
+                open_box
+                from tabulate import tabulate
+                frame_clear(option_frm)
+                display_clear()
+
+                if name.get() == 1:
+                    fnct.dbs_agent(f"update {table} set Name = '{name_up.get()}' where id = {student_id.get()};")
+                if phone_number.get() == 1:
+                    fnct.dbs_agent(f"update {table} set phone_num = '{phone_num_up.get()}' where id = {student_id.get()};")
+                if roll_number.get() == 1:
+                    fnct.dbs_agent(f"update {table} set roll_num = '{roll_num_up.get()}' where id = {student_id.get()};")
+                if address.get() == 1:
+                    fnct.dbs_agent(f"update {table} set address = '{address_up.get()}' where id = {student_id.get()};")
+                if mother_name.get() == 1:
+                    fnct.dbs_agent(f"update {table} set mother_name = '{mother_name_up.get()}' where id = {student_id.get()};")
+                if father_name.get() == 1:
+                    fnct.dbs_agent(f"update {table} set father_name = '{father_name_up.get()}' where id = {student_id.get()};")
+                if dob.get() == 1:
+                    fnct.dbs_agent(f"update {table} set dob = '{dob_up.get()}' where id = {student_id.get()};")
+
+                try:
+                    to_updt = fnct.dbs_agent(f'Select * from {table} where ID = {student_id.get()};')
+                    header = ["ID", "Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
+                    displayer.insert(base_builder.END, f'{tabulate(to_updt, headers=header, tablefmt="fancy_grid")}')
+                    fnct.logs("Data updated successfully.")
+                    close_box()
+                except Exception as error_toupdt:
+                    print(Fore.RED + "There is an error occurring. Please Check logs for more information.")
+                    fnct.logs(f"Error -> {error_toupdt}")
+
+            def select_rec():
+                open_box()
+                from tabulate import tabulate
+
+                frame_clear(option_frm)
+                display_clear()
+
+                global name_up
+                global roll_num_up
+                global phone_num_up
+                global address_up
+                global mother_name_up
+                global father_name_up
+                global dob_up
+
+                name_up = base_builder.StringVar()
+                roll_num_up = base_builder.StringVar()
+                phone_num_up = base_builder.StringVar()
+                address_up = base_builder.StringVar()
+                mother_name_up = base_builder.StringVar()
+                father_name_up = base_builder.StringVar()
+                dob_up = base_builder.StringVar()
+                try:
+                    updt_in = fnct.dbs_agent(f'Select * from {table} where ID = {student_id.get()};')
+                    header = ["ID", "Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
+                    displayer.insert(base_builder.END, f'{tabulate(updt_in, headers=header, tablefmt="fancy_grid")}')
+                    close_box()
+                except Exception as error_updt:
+                    print(Fore.RED + "There is an error. Please check logs for more information.")
+                    fnct.logs(f"Error -> {error_updt}")
+
+                if name.get() == 1:
+                    base_builder.Label(option_frm, text="FULL NAME : ", font=(" ", 10, 'bold')).place(x=5, y=2)
+                    base_builder.Entry(option_frm, textvariable=name_up, relief='solid').place(x=95, y=4)
+                if phone_number.get() == 1:
+                    base_builder.Label(option_frm, text="PHONE NUMBER : ", font=(" ", 10, 'bold')).place(x=225, y=2)
+                    base_builder.Entry(option_frm, textvariable=phone_num_up, relief='solid').place(x=345, y=4)
+                if roll_number.get() == 1:
+                    base_builder.Label(option_frm, text="ROLL NUMBER : ", font=(" ", 10, 'bold')).place(x=480, y=2)
+                    base_builder.Entry(option_frm, textvariable=roll_num_up, relief='solid').place(x=600, y=4)
+                if address.get() == 1:
+                    base_builder.Label(option_frm, text="ADDRESS : ", font=(" ", 10, 'bold')).place(x=750, y=2)
+                    base_builder.Entry(option_frm, textvariable=address_up, relief='solid').place(x=835, y=4)
+                if mother_name.get() == 1:
+                    base_builder.Label(option_frm, text="MOTHER NAME : ", font=(" ", 10, 'bold')).place(x=5, y=40)
+                    base_builder.Entry(option_frm, textvariable=mother_name_up, relief='solid').place(x=115, y=42)
+                if father_name.get() == 1:
+                    base_builder.Label(option_frm, text="FATHER NAME : ", font=(" ", 10, 'bold')).place(x=250, y=40)
+                    base_builder.Entry(option_frm, textvariable=father_name_up, relief='solid').place(x=380, y=42)
+                if dob.get() == 1:
+                    base_builder.Label(option_frm, text="DOB : ", font=(" ", 10, 'bold')).place(x=520, y=40)
+                    base_builder.Entry(option_frm, textvariable=dob_up, relief='solid').place(x=580, y=42)
+                base_builder.Button(option_frm, text="UPDATE", font=(' ', 11, 'bold'), bg='#34a700', fg='white', command=update_rec).place(x=800, y=40)
+
+            base_builder.Label(option_frm, text='ID of the student : ', font=(' ', 10,'bold')).place(x=2, y=2)
+            student_id = base_builder.StringVar()
+            student_id_entry = base_builder.Entry(option_frm, textvariable=student_id, relief='solid', borderwidth=1)
+            student_id_entry.place(x=2, y=25)
+            base_builder.Label(option_frm, text='Select field to update', font=(' ', 10, 'bold')).place(x=180, y=2)
+
+            # Entry variables
+            name = base_builder.IntVar()
+            roll_number = base_builder.IntVar()
+            phone_number = base_builder.IntVar()
+            address = base_builder.IntVar()
+            mother_name = base_builder.IntVar()
+            father_name = base_builder.IntVar()
+            dob = base_builder.IntVar()
+
+            # Check Buttons
+            base_builder.Checkbutton(option_frm, text='Name', variable=name).place(x=180, y=25)
+            base_builder.Checkbutton(option_frm, text='Roll Number', variable=roll_number).place(x=350, y=25)
+            base_builder.Checkbutton(option_frm, text='Phone Number', variable=phone_number).place(x=500, y=25)
+            base_builder.Checkbutton(option_frm, text='Address', variable=address).place(x=650, y=25)
+            base_builder.Checkbutton(option_frm, text='Mother Name', variable=mother_name).place(x=180, y=50)
+            base_builder.Checkbutton(option_frm, text='Father Name', variable=father_name).place(x=350, y=50)
+            base_builder.Checkbutton(option_frm, text='DOB', variable=dob).place(x=500, y=50)
+
+            base_builder.Button(option_frm, text='SUBMIT', font=(' ', 11, 'bold'), bg='#34a700', fg='white', command=select_rec).place(x=800, y=15)
+
         # Logo
         logo = base_builder.PhotoImage(file='image/logo.png')
         logo_printer = base_builder.Label(header_frm, image=logo, padx=5, pady=5)
@@ -158,12 +272,12 @@ try:
         # Show Record
         show_rec = base_builder.Button(menu_frm, text="Show Record", fg='green', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"), command=show_record)
         show_rec.pack(pady=10)
+
         # New record
         new_rec = base_builder.Button(menu_frm, text="New Record", fg='green', borderwidth=1, relief='solid', pady=2, padx=20, font=("abel", 12, "bold"), command=new_record)
         new_rec.pack(pady=10)
 
-        # Update Record
-        upd_rec = base_builder.Button(menu_frm, text="Update Record", fg='green', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"))
+        upd_rec = base_builder.Button(menu_frm, text="Update Record", fg='green', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"), command=update_rec)
         upd_rec.pack(pady=10)
 
         # Delete Record
@@ -179,7 +293,7 @@ try:
                                           font=("abel", 15, "bold"))
         creater_name.pack(side='bottom', anchor='s')
 
-    # Configuration
+    # Configuration File Missing Error
     else:
         base.title("Student Information System - Configuration Error")
         base.geometry("400x100")
