@@ -281,8 +281,9 @@ try:
         upd_rec.pack(pady=10)
 
         # Delete Record
-        del_rec = base_builder.Button(menu_frm, text="Delete Record", fg='green', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"))
+        del_rec = base_builder.Button(menu_frm, text="Delete Record", fg='grey', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"))
         del_rec.pack(pady=10)
+        del_rec.config(state='disabled')
 
         # Exit
         ext = base_builder.Button(menu_frm, text="Exit", fg='green', borderwidth=1, relief='solid', pady=2, padx=45, font=("abel", 12, "bold"), command=quit)
