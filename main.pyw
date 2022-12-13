@@ -106,15 +106,20 @@ try:
             """This function adds new record to the database."""
             frame_clear(option_frm)
             display_clear()
+
             def submit_rec():
-                from tabulate import tabulate
-                open_box()
-                insert_agent = fnct.dbs_agent(f"insert into {table} (Name,Roll_num, phone_num, father_name, mother_name, address, dob) values('{name.get()}', '{roll_num.get()}', '{phone_num.get()}', '{father_name.get()}', '{mother_name.get()}', '{address.get()}', '{dob.get()}');")
-                fnct.logs("Data Recorded Successfully.")
-                header = ["Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
-                data_box =[[name.get(), roll_num.get(), phone_num.get(), address.get(), mother_name.get(), father_name.get(), dob.get()]]
-                displayer.insert(base_builder.END, f'{tabulate(data_box, headers=header, tablefmt="fancy_grid")}')
-                displayer.insert(base_builder.END, '\nData Recorded Successfully.\n')
+                try:
+                    from tabulate import tabulate
+                    open_box()
+                    insert_agent = fnct.dbs_agent(f"insert into {table} (Name,Roll_num, phone_num, father_name, mother_name, address, dob) values('{name.get()}', '{roll_num.get()}', '{phone_num.get()}', '{father_name.get()}', '{mother_name.get()}', '{address.get()}', '{dob.get()}');")
+                    fnct.logs("Data Recorded Successfully.")
+                    header = ["Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
+                    data_box =[[name.get(), roll_num.get(), phone_num.get(), address.get(), mother_name.get(), father_name.get(), dob.get()]]
+                    displayer.insert(base_builder.END, f'{tabulate(data_box, headers=header, tablefmt="fancy_grid")}')
+                    displayer.insert(base_builder.END, '\nData Recorded Successfully.\n')
+                    fnct.logs(f"A new record is added to the database successfully.")
+                except Exception as new_rec_error:
+                    fnct.logs(f"Error -> {new_rec_error}")
 
             name = base_builder.StringVar()
             roll_num = base_builder.StringVar()
@@ -177,7 +182,7 @@ try:
                     to_updt = fnct.dbs_agent(f'Select * from {table} where ID = {student_id.get()};')
                     header = ["ID", "Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
                     displayer.insert(base_builder.END, f'{tabulate(to_updt, headers=header, tablefmt="fancy_grid")}')
-                    fnct.logs("Data updated successfully.")
+                    fnct.logs(f"Record of student with ID {student_id.get()} is updated successfully")
                     close_box()
                 except Exception as error_toupdt:
                     print(Fore.RED + "There is an error occurring. Please Check logs for more information.")
@@ -272,6 +277,7 @@ try:
             def delete_data():
                 try:
                     fnct.dbs_agent(f"delete from {table} where id = {student_id_del.get()}")
+                    fnct.logs(f"Student with ID {student_id_del.get()} is deleted from the record.")
                 except Exception as del_error:
                     fnct.logs(f"Error -> {del_error}")
                     print(Fore.RED + "There is an error occurring while deleting the record.")
