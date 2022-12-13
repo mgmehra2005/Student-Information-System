@@ -1,4 +1,5 @@
 def dbs_agent(command):
+    """This program executes sql commands to mysql server."""
     from colorama import Fore, Style
     import config
     import mysql.connector as msc
@@ -18,13 +19,6 @@ def dbs_agent(command):
         else:
             print(Fore.RED + "Configure MYSQL correctly")
             Style.RESET_ALL
-
-
-def header(banner):
-    import pyfiglet, colorama
-    printer = pyfiglet.figlet_format(banner, font="banner3")
-    print(colorama.Fore.GREEN + printer)
-    colorama.Style.RESET_ALL
 
 
 def current_time(time_parameter):
