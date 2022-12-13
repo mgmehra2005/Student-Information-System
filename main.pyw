@@ -48,15 +48,17 @@ try:
         close_box = lambda: displayer.config(state='disabled')
 
         def display_clear():
+            """This function clear all the printed text in the displayer area"""
             open_box()
             displayer.delete("1.0", "end")
 
         def frame_clear(frame):
+            """This function delete all widgets from a frame."""
             for width in frame.winfo_children():
                 width.destroy()
 
         def view_tables():
-            """ List all the tables from sql database. """
+            """ This function list all the tables from sql database. """
             from tabulate import tabulate
             fnct.logs("Clicked on view table.")
             display_clear()
@@ -79,10 +81,11 @@ try:
             base_builder.Label(option_frm, text="Select Record", font=(" ", 13, 'bold')).place(x=10, y=5)
             choicevalue = base_builder.StringVar()
             base_builder.Entry(option_frm, textvariable=choicevalue, relief='solid', borderwidth=1).place(x=10, y=35)
-            base_builder.Button(option_frm, text='Submit', relief='solid', fg='green', command=table_select, padx=10, pady=2).place(x=145, y=25)
+            base_builder.Button(option_frm, text='Submit', fg='white', font=(" ", 11, "bold"), bg="green", command=table_select, padx=10, pady=2).place(x=145, y=25)
 
 
         def show_record():
+            """This function displays all the data of the database"""
             open_box()
             try:
                 """ Displays all the data of a record. """
@@ -100,6 +103,7 @@ try:
                 Style.RESET_ALL
 
         def new_record():
+            """This function adds new record to the database."""
             frame_clear(option_frm)
             display_clear()
             def submit_rec():
@@ -107,8 +111,8 @@ try:
                 open_box()
                 insert_agent = fnct.dbs_agent(f"insert into {table} (Name,Roll_num, phone_num, father_name, mother_name, address, dob) values('{name.get()}', '{roll_num.get()}', '{phone_num.get()}', '{father_name.get()}', '{mother_name.get()}', '{address.get()}', '{dob.get()}');")
                 fnct.logs("Data Recorded Successfully.")
-                header = ["ID", "Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
-                data_box =[[name.get(), roll_num.get(), phone_num.get(), father_name.get(), mother_name.get(), address.get(), dob.get()]]
+                header = ["Name", "Roll No.", "Phone No.", "Address", "Mother Name", "Father Name", "DOB"]
+                data_box =[[name.get(), roll_num.get(), phone_num.get(), address.get(), mother_name.get(), father_name.get(), dob.get()]]
                 displayer.insert(base_builder.END, f'{tabulate(data_box, headers=header, tablefmt="fancy_grid")}')
                 displayer.insert(base_builder.END, '\nData Recorded Successfully.\n')
 
@@ -144,9 +148,11 @@ try:
             base_builder.Button(option_frm, text='Submit', bg='#34a700', fg='white', padx=15, pady=5, font=(" ", 10, 'bold'), command=submit_rec).place(x=950, y=2)
 
         def update_rec():
+            """This function update data in mysql database."""
             show_record()
             frame_clear(option_frm)
-            def update_rec():
+
+            def update_data():
                 open_box
                 from tabulate import tabulate
                 frame_clear(option_frm)
@@ -229,7 +235,7 @@ try:
                 if dob.get() == 1:
                     base_builder.Label(option_frm, text="DOB : ", font=(" ", 10, 'bold')).place(x=520, y=40)
                     base_builder.Entry(option_frm, textvariable=dob_up, relief='solid').place(x=580, y=42)
-                base_builder.Button(option_frm, text="UPDATE", font=(' ', 11, 'bold'), bg='#34a700', fg='white', command=update_rec).place(x=800, y=40)
+                base_builder.Button(option_frm, text="UPDATE", font=(' ', 11, 'bold'), bg='#34a700', fg='white', command=update_data).place(x=800, y=40)
 
             base_builder.Label(option_frm, text='ID of the student : ', font=(' ', 10,'bold')).place(x=2, y=2)
             student_id = base_builder.StringVar()
@@ -257,6 +263,26 @@ try:
 
             base_builder.Button(option_frm, text='SUBMIT', font=(' ', 11, 'bold'), bg='#34a700', fg='white', command=select_rec).place(x=800, y=15)
 
+        def delete_rec():
+            from tabulate import tabulate
+            frame_clear(option_frm)
+            display_clear()
+            show_record()
+
+            def delete_data():
+                try:
+                    fnct.dbs_agent(f"delete from {table} where id = {student_id_del.get()}")
+                except Exception as del_error:
+                    fnct.logs(f"Error -> {del_error}")
+                    print(Fore.RED + "There is an error occurring while deleting the record.")
+                delete_rec()
+
+            base_builder.Label(option_frm, text='ID of the student to delete : ', font=(' ', 10, 'bold')).place(x=2, y=2)
+            student_id_del = base_builder.StringVar()
+            student_id_entry = base_builder.Entry(option_frm, textvariable=student_id_del, relief='solid', borderwidth=1)
+            student_id_entry.place(x=2, y=25)
+            base_builder.Button(option_frm, text='Delete', font=(' ', 11, 'bold'), bg='red', fg='white', command=delete_data).place(x=150, y=25)
+
         # Logo
         logo = base_builder.PhotoImage(file='image/logo.png')
         logo_printer = base_builder.Label(header_frm, image=logo, padx=5, pady=5)
@@ -281,9 +307,8 @@ try:
         upd_rec.pack(pady=10)
 
         # Delete Record
-        del_rec = base_builder.Button(menu_frm, text="Delete Record", fg='grey', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"))
+        del_rec = base_builder.Button(menu_frm, text="Delete Record", fg='green', borderwidth=1, relief='solid', pady=2, padx=15, font=("abel", 12, "bold"), command=delete_rec)
         del_rec.pack(pady=10)
-        del_rec.config(state='disabled')
 
         # Exit
         ext = base_builder.Button(menu_frm, text="Exit", fg='green', borderwidth=1, relief='solid', pady=2, padx=45, font=("abel", 12, "bold"), command=quit)
